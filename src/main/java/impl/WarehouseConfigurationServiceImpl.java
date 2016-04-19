@@ -21,6 +21,7 @@ public class WarehouseConfigurationServiceImpl implements WarehouseConfiguration
 
     @Override
     public void shiftWarehouseSystemDate() {
-
+        LocalDate date = CompanyProvider.getInstance().getCurrentDate();
+        CompanyProvider.getInstance().setCurrentDate(date.plusDays(1));
     }
 }
