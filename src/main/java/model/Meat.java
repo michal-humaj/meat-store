@@ -11,6 +11,7 @@ import java.io.Serializable;
  */
 public class Meat implements Serializable {
 
+    @SerializedName("type")
     private MeatType meatType;
 
     private int count;

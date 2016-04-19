@@ -32,7 +32,7 @@ public class Main {
             String jsonPickItem = new String(Files.readAllBytes(Paths.get("pickItemFromWarehouse.json")));
 //            String out = warehouseManageService.getPickingItemFromWarehouseByMeatType(jsonPickItem);
             String out = warehouseManageService
-                    .putItemInStock("{ \"type\" : \"PORK\", \"count\" : 14, \"date-of-slaughter\" : \"25.02.2016\", \"is-frozen\" : false }");
+                    .putItemInStock("{ \"type\" : \"PORK\", \"count\" : 800, \"date-of-slaughter\" : \"25.02.2016\", \"is-frozen\" : false }");
 
             Warehouse w = CompanyProvider.getInstance().getAppData().getWarehouse();
             System.out.printf(out);
