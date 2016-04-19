@@ -73,7 +73,7 @@ public class Main {
         meat2.setMeatType(MeatType.SALMON);
 
         meat3.setCount(2);
-        meat3.setDate("08.06.2016");
+        meat3.setDate("08.03.2016");
         meat3.setFrozen(false);
         meat3.setMeatType(MeatType.CHICKEN);
 

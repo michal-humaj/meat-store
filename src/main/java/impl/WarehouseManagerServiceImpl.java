@@ -175,13 +175,15 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
         Warehouse warehouse = CompanyProvider.getInstance().getAppData().getWarehouse();
         ItemPlace.ItemPlaceList output = new ItemPlace.ItemPlaceList();
         List<Meat> meats = new ArrayList<>();
+        int durability = input.getDaysDurability();
 
         for (CoolingBox coolingBox : warehouse.getCoolingBoxes()) {
             if(coolingBox.getType().equals(input.getCoolingType())) {
                 for(Shelf shelf : coolingBox.getShelves()) {
                     for(Meat meat : shelf.getMeat()) {
                         if(meat.getMeatType().equals(input.getMeatType())) {
-                            meats.add(meat);
+                            if(durability == 0 || meat.isInDurability(durability))
+                                meats.add(meat);
                         }
                     }
                 }

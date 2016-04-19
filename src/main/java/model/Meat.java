@@ -1,7 +1,9 @@
 package model;
 
 import com.google.gson.annotations.SerializedName;
+import impl.CompanyProvider;
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 import util.DateConverter;
 
 import java.io.Serializable;
@@ -74,6 +76,8 @@ public class Meat implements Serializable {
     }
 
     public boolean isInDurability(int days) {
-        return false;
+        LocalDate day = CompanyProvider.getInstance().getCurrentDate().plusDays(days);
+
+        return DateConverter.toDateTimeDots(getExpiryDate()).isAfter(day.toDateTimeAtStartOfDay());
     }
 }
