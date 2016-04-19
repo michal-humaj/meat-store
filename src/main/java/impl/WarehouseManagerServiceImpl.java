@@ -128,13 +128,11 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
             }
             if (addingFinished) break;
         }
-
-        if (!addingFinished){
-
-        }
-
         ItemPlace.ItemPlaceList itemPlaceList = new ItemPlace.ItemPlaceList();
         itemPlaceList.setItemPlaceList(itemPlaces);
+        if (!addingFinished){
+            itemPlaceList.setMessage("Warehouse full, only part of the shipment was stored");
+        }
         return itemPlaceList;
     }
 
@@ -144,7 +142,13 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
         ItemPlace.ItemPlaceList itemPlaceList = new ItemPlace.ItemPlaceList();
         MeatList meatList = (new Gson()).fromJson(inputJson, MeatList.class);
         for (Meat meat : meatList.getMeatList()) {
-            itemPlaceList.getItemPlaceList().addAll(putItemInStock(meat).getItemPlaceList());
+            final ItemPlace.ItemPlaceList returned = putItemInStock(meat);
+            String message = returned.getMessage();
+            itemPlaceList.getItemPlaceList().addAll(returned.getItemPlaceList());
+            if (message != null) {
+                itemPlaceList.setMessage(message);
+            }
+
         }
         return GSON.toJson(itemPlaceList);
     }
