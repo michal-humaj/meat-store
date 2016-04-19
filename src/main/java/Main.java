@@ -24,15 +24,17 @@ public class Main {
             String jsonContent = new String(Files.readAllBytes(Paths.get("init1.json")));
             warehouseConfigurationService.initializateWarehouse(jsonContent);
 
+            receiveShipments();
+
             addMeats();
             String jsonPickItem = new String(Files.readAllBytes(Paths.get("pickItemFromWarehouse.json")));
-            //String out = warehouseManageService.getPickingItemFromWarehouseByMeatType(jsonPickItem);
+            String out = warehouseManageService.getPickingItemFromWarehouseByMeatType(jsonPickItem);
 
-            //out = warehouseManageService
-            //        .putItemInStock("{ \"type\" : \"PORK\", \"count\" : 230, \"date-of-slaughter\" : \"25.02.2016\", \"is-frozen\" : false }");
+            out = warehouseManageService
+                    .putItemInStock("{ \"type\" : \"PORK\", \"count\" : 230, \"date-of-slaughter\" : \"25.02.2016\", \"is-frozen\" : false }");
 
             Warehouse w = CompanyProvider.getInstance().getAppData().getWarehouse();
-            //System.out.println(out);
+            System.out.printf(out);
 
             String locationOfItemInWarehouse = warehouseManageService.getLocationOfItemInWarehouse("{\"type\":\"CHICKEN\",\"cooling-type\":\"COOLING\"}");
             System.out.println("Item location: " + locationOfItemInWarehouse);
@@ -98,5 +100,13 @@ public class Main {
                 }
             }
         }
+    }
+
+    public static void receiveShipments() throws IOException {
+        WarehouseManageService warehouseManageService = new WarehouseManagerServiceImpl();
+
+        String receivingShipments = new String(Files.readAllBytes(Paths.get("receivingShipments.json")));
+        String out = warehouseManageService.receivingShipments(receivingShipments);
+        System.out.println("receiving shipments" + out);
     }
 }
