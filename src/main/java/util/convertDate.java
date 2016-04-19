@@ -7,10 +7,11 @@ import org.joda.time.format.DateTimeFormatter;
 /**
  * Created by vlado on 19.04.2016.
  */
-public class convertDate {
+public class ConvertDate {
 
     public String toStringDots(DateTime date){
-        return date.toString();
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("dd.MM.yyyy");
+        return fmt.print(date);
     }
 
     public DateTime toDateTimeDots(String date){
@@ -19,7 +20,8 @@ public class convertDate {
     }
 
     public String toStringSlashes(DateTime date){
-        return date.toString();
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
+        return fmt.print(date);
     }
 
     public DateTime toDateTimeSlashes(String date){
