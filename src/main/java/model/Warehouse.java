@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,7 +8,7 @@ import java.util.List;
  */
 public class Warehouse {
 
-    private List<CoolingBox> coolingBoxes;
+    private List<CoolingBox> coolingBoxes = new ArrayList<CoolingBox>();
     private String serialNumber;
 
     public List<CoolingBox> getCoolingBoxes() {
