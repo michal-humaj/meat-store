@@ -60,7 +60,7 @@ public class Main {
         Meat meat1 = new Meat();
         Meat meat2 = new Meat();
         Meat meat3 = new Meat();
-        Meat meat4 = new Meat();
+        final Meat meat4 = new Meat();
 
         meat1.setCount(2);
         meat1.setDate("08.08.2016");
@@ -87,7 +87,7 @@ public class Main {
         meats.add(meat2);
         meats.add(meat3);
         warehouse.getCoolingBoxes().get(0).getShelves().get(0).setMeat(meats);
-        warehouse.getCoolingBoxes().get(1).getShelves().get(3).setMeat(new ArrayList<Meat>() {{
+        warehouse.getCoolingBoxes().get(1).getShelves().get(1).setMeat(new ArrayList<Meat>() {{
             add(meat4);
         }});
 

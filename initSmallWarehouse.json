@@ -64,66 +64,66 @@
     "cooling-boxes":
     [
       {
-        "number": "58",
+        "number": "1",
         "type": "FREEZING",
         "shelfs":
         [
           {
-            "number": "k11",
-            "capacity": 169
+            "number": "freezing 1 1 kapacita 10",
+            "capacity": 10
           },
 
           {
-            "number": "j8",
-            "capacity": 152
+            "number": "freezing 1  2 kapacita 20",
+            "capacity": 20
           }
         ]
       },
 
       {
-        "number": "55",
+        "number": "2",
         "type": "FREEZING",
         "shelfs":
         [
           {
-            "number": "k11",
-            "capacity": 100
+            "number": "freezing 2 1 kapacita 5",
+            "capacity": 5
           },
 
           {
-            "number": "g9",
-            "capacity": 154
+            "number": "freezing 2 2 kapacita 40",
+            "capacity": 40
           }
         ]
       },
 
       {
-        "number": "33",
+        "number": "3",
         "type": "COOLING",
         "shelfs":
         [
 
           {
-            "number": "s11",
-            "capacity": 280
+            "number": "cooling 1 1 kapacita 25",
+            "capacity": 25
           }
         ]
       },
 
       {
-        "number": "82",
+        "number": "4",
         "type": "COOLING",
         "shelfs":
         [
 
           {
-            "number": "m12",
-            "capacity": 117
+            "number": "cooling 2 1 kapacita 10",
+            "capacity": 10
           },
 
           {
-            "number": "u9",
-            "capacity": 46
+            "number": "cooling 2 2 kapacita 50",
+            "capacity": 50
           }
         ]
       }
