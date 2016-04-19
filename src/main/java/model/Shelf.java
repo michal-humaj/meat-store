@@ -12,6 +12,14 @@ public class Shelf {
     private int capacity;
     private List<Meat> meat = new ArrayList<Meat>();
 
+    public int getFreeCapacity(){
+        int freeCapacity = capacity;
+        for (Meat meat : this.meat){
+            capacity -= meat.getCount();
+        }
+        return freeCapacity;
+    }
+
     public String getNumber() {
         return number;
     }
