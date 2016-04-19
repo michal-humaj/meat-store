@@ -3,6 +3,7 @@ package model;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by Jakub on 19.04.2016.
@@ -16,7 +17,7 @@ public class Company {
 
     private Employee director;
 
-    private HashMap employees;
+    private HashMap<String, List<Employee>> employees;
 
     public String getName() {
         return name;
@@ -42,11 +43,11 @@ public class Company {
         this.director = director;
     }
 
-    public HashMap getEmployees() {
+    public  HashMap<String, List<Employee>>  getEmployees() {
         return employees;
     }
 
-    public void setEmployees(HashMap employees) {
+    public void setEmployees( HashMap<String, List<Employee>>  employees) {
         this.employees = employees;
     }
 
