@@ -1,6 +1,7 @@
 package model;
 
 import com.google.gson.annotations.SerializedName;
+import impl.CompanyProvider;
 import org.joda.time.DateTime;
 import util.DateConverter;
 
@@ -51,7 +52,7 @@ public class Meat implements Serializable {
 
     public int getDurabilitDate(){
         DateTimeFormatter dtfOut = DateTimeFormat.forPattern("MMddyyyy");
-        int now = Integer.valueOf(dtfOut.print(DateTime.now()));
+        int now = Integer.valueOf(dtfOut.print(CompanyProvider.getInstance().getCurrentDate()));
         int expiry = Integer.valueOf(dtfOut.print(DateConverter.toDateTimeDots(getDate())));
 
         if (expiry > now){

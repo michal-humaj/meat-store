@@ -1,5 +1,5 @@
 { "meat-order" : [
   { "type" : "OPOSSUM", "count" : 126, "cooling-type" : "FREEZING", "days-durabilit" : 14 },
   { "type" : "ALLIGATOR", "count" : 75, "cooling-type" : "FREEZING", "days-durabilit" : 14 },
-  { "type" : "SWEETBREADS", "count" : 132, "cooling-type" : "COOLING” }
+  { "type" : "SWEETBREADS", "count" : 132, "cooling-type" : "COOLING" }
     ] }

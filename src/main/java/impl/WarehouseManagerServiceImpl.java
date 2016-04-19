@@ -2,10 +2,10 @@ package impl;
 
 import api.WarehouseManageService;
 import com.google.gson.Gson;
-import dto.input.EjectionItem;
 import dto.input.ItemPlaceInput;
-import dto.input.MeatList;
+import dto.input.MeatOrder;
 import dto.output.ItemPlace;
+import dto.output.MeatOrderPlace;
 import model.*;
 import org.apache.commons.lang3.SerializationUtils;
 import util.DateConverter;
@@ -57,7 +57,29 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
 
     @Override
     public String preparationShipmentOfMeat(String inputJson) {
-        return null;
+        MeatOrder.MeatOrderList meatOrderList = GSON.fromJson(inputJson, MeatOrder.MeatOrderList.class);
+
+        Warehouse warehouse = CompanyProvider.getInstance().getAppData().getWarehouse();
+
+        MeatOrderPlace.MeatOrderPlaceList result = new MeatOrderPlace.MeatOrderPlaceList();
+        MeatOrderPlace meat = new MeatOrderPlace();
+        //List<ItemPlace> itemPlaceList = new ArrayList<>();
+        ItemPlace.ItemPlaceList itemPlaceList;
+
+        for (MeatOrder meatOrder : meatOrderList.getMeatOrderList()){
+            itemPlaceList = this.getPickingItemFromWarehouseByMeatTypeImpl(GSON.toJson(meatOrder));
+            for (ItemPlace itemPlace : itemPlaceList.getItemPlaceList()){
+                MeatOrderPlace meatOrderPlace = new MeatOrderPlace();
+                meatOrderPlace.setShelfNumber(itemPlace.getShelfNumber());
+                meatOrderPlace.setCount(itemPlace.getCount());
+                meatOrderPlace.setType(meatOrder.getMeatType());
+                meatOrderPlace.setBoxNumber(itemPlace.getBoxNumber());
+                result.getMeatOrderPlaceList().add(meatOrderPlace);
+            }
+
+        }
+
+        return GSON.toJson(result);
     }
 
     @Override
