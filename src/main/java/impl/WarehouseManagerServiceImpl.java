@@ -2,9 +2,14 @@ package impl;
 
 import api.WarehouseManageService;
 import com.google.gson.Gson;
+import com.sun.org.apache.xpath.internal.axes.IteratorPool;
 import dto.MeatGroup;
 import dto.input.ItemPlaceInput;
 import dto.output.ItemPlace;
+import model.*;
+import org.joda.time.DateTime;
+import util.DateConverter;
+import util.MeatDateComparator;
 import model.CoolingBox;
 import model.Meat;
 import model.Shelf;
@@ -15,9 +20,10 @@ import org.joda.time.DateTime;
 import util.DateConverter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 
 /**
  * Created by Rex on 19.4.2016.
@@ -55,6 +61,28 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
 
     @Override
     public String getPickingItemFromWarehouseByMeatType(String inputJson) {
+        Gson gson = new Gson();
+        ItemPlaceInput input = gson.fromJson(inputJson, ItemPlaceInput.class);
+        Warehouse warehouse = CompanyProvider.getInstance().getAppData().getWarehouse();
+        ItemPlace output = new ItemPlace();
+        List<Meat> meats = new ArrayList<>();
+
+        for (CoolingBox coolingBox : warehouse.getCoolingBoxes()) {
+            if(coolingBox.getType().equals(input.getCoolingType())) {
+                for(Shelf shelf : coolingBox.getShelves()) {
+                    for(Meat meat : shelf.getMeat()) {
+                        if(meat.getMeatType().equals(input.getMeatType())) {
+                            meats.add(meat);
+                        }
+                    }
+                }
+            }
+        }
+
+        Collections.sort(meats, new MeatDateComparator());
+
+
+
         return null;
     }
 

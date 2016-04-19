@@ -14,6 +14,11 @@ public class ItemPlaceInput {
     @SerializedName("cooling-type")
     private BoxType coolingType;
 
+    @SerializedName("days-durability")
+    private int daysDurability;
+
+    private int count;
+
     public MeatType getMeatType() {
         return meatType;
     }
@@ -28,5 +33,21 @@ public class ItemPlaceInput {
 
     public void setCoolingType(BoxType coolingType) {
         this.coolingType = coolingType;
+    }
+
+    public int getDaysDurability() {
+        return daysDurability;
+    }
+
+    public void setDaysDurability(int daysDurability) {
+        this.daysDurability = daysDurability;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 }
