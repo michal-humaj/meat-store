@@ -1,4 +1,4 @@
-package dto;
+package dto.output;
 
 import com.google.gson.annotations.SerializedName;
 import org.joda.time.DateTime;
