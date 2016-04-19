@@ -8,7 +8,6 @@ import dto.output.MeatOrderPlace;
 import dto.output.MoveItem;
 import model.*;
 import org.apache.commons.lang3.SerializationUtils;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import util.DateConverter;
 import util.MeatDateComparator;
 
@@ -140,13 +139,50 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
         return GSON.toJson(ejectionItemList);
     }
 
-    /**
-     * Not implemented
-     * @param inputJson
-     */
+
     @Override
     public void moveItem(String inputJson) {
-        throw new NotImplementedException();
+        MoveItem moveItem = GSON.fromJson(inputJson, MoveItem.class);
+
+        Meat originalMeat = null;
+        for (CoolingBox coolingBox : CompanyProvider.getInstance().getAppData().getWarehouse().getCoolingBoxes()) {
+            if(coolingBox.getNumber() == moveItem.getCurrentItemPlace().getBoxNumber()) {
+                for (Shelf shelf : coolingBox.getShelves()) {
+                    if(shelf.getNumber().equals(moveItem.getCurrentItemPlace().getShelfNumber())) {
+                        Meat meatToRemove = null;
+                        for (Meat meat : shelf.getMeat()) {
+                            if(meat.getExpiryDate().equals(moveItem.getDateOfExpiration()) && meat.getMeatType().equals(moveItem.getMeatType())) {
+                                originalMeat = meat;
+                                if(meat.getCount() > moveItem.getCount()) {
+                                    meat.setCount(meat.getCount() - moveItem.getCount());
+                                } else {
+                                    meatToRemove = meat;
+                                }
+                                break;
+                            }
+                        }
+                        shelf.getMeat().remove(meatToRemove);
+                    }
+                }
+            }
+        }
+
+        for (CoolingBox coolingBox : CompanyProvider.getInstance().getAppData().getWarehouse().getCoolingBoxes()) {
+            if(coolingBox.getNumber() == moveItem.getNewItemPlace().getBoxNumber()) {
+                for (Shelf shelf : coolingBox.getShelves()) {
+                    if(shelf.getNumber().equals(moveItem.getNewItemPlace().getShelfNumber())) {
+                        if(originalMeat != null) {
+                            Meat meat = new Meat();
+                            meat.setMeatType(moveItem.getMeatType());
+                            meat.setCount(moveItem.getCount());
+                            meat.setDate(originalMeat.getDate());
+                            meat.setShelf(shelf);
+                            shelf.getMeat().add(meat);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
