@@ -1,6 +1,9 @@
 package model;
 
 import com.google.gson.annotations.SerializedName;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +17,8 @@ public class Company {
 
     @SerializedName("founding-date")
     private String foundingDate;
+
+    private DateTime foundingDateFormatted;
 
     private Employee director;
 
@@ -47,8 +52,22 @@ public class Company {
         return employees;
     }
 
+
+    public DateTime getFoundingDateFormatted() {
+        return foundingDateFormatted;
+    }
+
+    public void setFoundingDateFormatted(DateTime foundingDateFormatted) {
+        this.foundingDateFormatted = foundingDateFormatted;
+    }
+
     public void setEmployees( HashMap<String, List<Employee>>  employees) {
         this.employees = employees;
+    }
+
+    public void setConvertedDate(){
+        DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/yyyy");
+        this.setFoundingDateFormatted(formatter.parseDateTime(this.getFoundingDate()));
     }
 
 }

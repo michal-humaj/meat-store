@@ -15,6 +15,7 @@ public class WarehouseConfigurationServiceImpl implements WarehouseConfiguration
         Gson gson = new Gson();
         AppData appData = gson.fromJson(inputJson, AppData.class);
 
+        appData.getCompany().setConvertedDate();
         CompanyProvider.getInstance().setAppData(appData);
         CompanyProvider.getInstance().setCurrentDate(LocalDate.now());
     }
