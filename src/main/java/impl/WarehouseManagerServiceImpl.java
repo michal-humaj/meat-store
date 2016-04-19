@@ -105,7 +105,7 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
 
                 if (shelf.getFreeCapacity() == 0){
                     continue;
-                } else if (addingMeat.getCount() < shelf.getFreeCapacity()){
+                } else if (addingMeat.getCount() <= shelf.getFreeCapacity()){
                     shelf.getMeat().add(addingMeat);
                     ItemPlace itemPlace = new ItemPlace();
                     itemPlace.setBoxNumber(cb.getNumber());
@@ -129,6 +129,10 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
 
             }
             if (addingFinished) break;
+        }
+
+        if (!addingFinished){
+
         }
 
         ItemPlace.ItemPlaceList itemPlaceList = new ItemPlace.ItemPlaceList();

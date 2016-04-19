@@ -15,7 +15,7 @@ public class Shelf {
     public int getFreeCapacity(){
         int freeCapacity = capacity;
         for (Meat meat : this.meat){
-            capacity -= meat.getCount();
+            freeCapacity -= meat.getCount();
         }
         return freeCapacity;
     }
