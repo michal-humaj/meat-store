@@ -80,7 +80,6 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
         }
 
         Collections.sort(meats, new MeatDateComparator());
-        
 
         return null;
     }
