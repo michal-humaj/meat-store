@@ -9,7 +9,7 @@ public class Employee {
     private String email;
     private String phone;
 
-    
+
     public String getName() {
         return name;
     }
