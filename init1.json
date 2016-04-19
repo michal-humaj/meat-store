@@ -1,9 +1,9 @@
 {
-	"company": 
+	"company":
 	{
 		"name": "Maso Slany s.r.o.",
 		"founding-date": "21/11/2007",
-		"director": 
+		"director":
 		{
 			"name": "Karel",
 			"surname": "Vomacka",
@@ -11,9 +11,9 @@
 			"phone": "+420 739 549 278"
 		},
 
-		"employees": 
+		"employees":
 		{
-			"dealers": 
+			"dealers":
 			[
 				{
 					"name": "Karel",
@@ -23,7 +23,7 @@
 				}
 			],
 
-			"cleaning-mans": 
+			"cleaning-mans":
 			[
 				{
 					"name": "Romana",
@@ -32,7 +32,7 @@
 				}
 			],
 
-			"warehousemans": 
+			"warehousemans":
 			[
 				{
 					"name": "Pavel",
@@ -58,15 +58,15 @@
 		}
 	},
 
-	"warehouse": 
+	"warehouse":
 	{
 		"serial-number": "NR-SLANY-09348",
-		"cooling-boxes": 
+		"cooling-boxes":
 		[
 			{
 				"number": "58",
 				"type": "COOLING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "j18",
@@ -168,7 +168,7 @@
 			{
 				"number": "94",
 				"type": "COOLING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "h12",
@@ -320,7 +320,7 @@
 			{
 				"number": "44",
 				"type": "COOLING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "w13",
@@ -467,7 +467,7 @@
 			{
 				"number": "19",
 				"type": "COOLING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "k11",
@@ -619,7 +619,7 @@
 			{
 				"number": "91",
 				"type": "COOLING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "g22",
@@ -731,7 +731,7 @@
 			{
 				"number": "17",
 				"type": "COOLING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "j29",
@@ -878,7 +878,7 @@
 			{
 				"number": "36",
 				"type": "FREEZING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "z25",
@@ -1030,7 +1030,7 @@
 			{
 				"number": "15",
 				"type": "COOLING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "k3",
@@ -1162,7 +1162,7 @@
 			{
 				"number": "39",
 				"type": "FREEZING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "m18",
@@ -1314,7 +1314,7 @@
 			{
 				"number": "13",
 				"type": "COOLING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "u13",
@@ -1431,7 +1431,7 @@
 			{
 				"number": "37",
 				"type": "COOLING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "g10",
@@ -1623,7 +1623,7 @@
 			{
 				"number": "11",
 				"type": "COOLING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "h11",
@@ -1770,7 +1770,7 @@
 			{
 				"number": "29",
 				"type": "COOLING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "t21",
@@ -1922,7 +1922,7 @@
 			{
 				"number": "2",
 				"type": "FREEZING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "m16",
@@ -2049,7 +2049,7 @@
 			{
 				"number": "1",
 				"type": "COOLING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "z27",
@@ -2196,7 +2196,7 @@
 			{
 				"number": "31",
 				"type": "COOLING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "t3",
@@ -2383,7 +2383,7 @@
 			{
 				"number": "51",
 				"type": "FREEZING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "w16",
@@ -2535,7 +2535,7 @@
 			{
 				"number": "65",
 				"type": "COOLING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "m26",
@@ -2647,7 +2647,7 @@
 			{
 				"number": "52",
 				"type": "FREEZING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "u11",
@@ -2784,7 +2784,7 @@
 			{
 				"number": "53",
 				"type": "FREEZING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "n22",
@@ -2936,7 +2936,7 @@
 			{
 				"number": "60",
 				"type": "FREEZING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "h25",
@@ -3078,7 +3078,7 @@
 			{
 				"number": "86",
 				"type": "FREEZING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "t20",
@@ -3225,7 +3225,7 @@
 			{
 				"number": "87",
 				"type": "COOLING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "k20",
@@ -3357,7 +3357,7 @@
 			{
 				"number": "84",
 				"type": "COOLING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "n23",
@@ -3494,7 +3494,7 @@
 			{
 				"number": "75",
 				"type": "COOLING",
-				"shelfs": 
+				"shelfs":
 				[
 					{
 						"number": "n21",

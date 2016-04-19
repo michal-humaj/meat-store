@@ -2,28 +2,17 @@ package impl;
 
 import api.WarehouseManageService;
 import com.google.gson.Gson;
-import com.sun.org.apache.xml.internal.dtm.ref.DTMDefaultBaseIterators;
-import com.sun.org.apache.xpath.internal.axes.IteratorPool;
-import dto.MeatGroup;
+import dto.input.EjectionItem;
 import dto.input.ItemPlaceInput;
+import dto.input.MeatList;
 import dto.output.ItemPlace;
 import model.*;
-import org.joda.time.DateTime;
+import org.apache.commons.lang3.SerializationUtils;
 import util.DateConverter;
 import util.MeatDateComparator;
-import model.CoolingBox;
-import model.Meat;
-import model.Shelf;
-import model.Warehouse;
-import model.*;
-import org.apache.commons.lang3.SerializationUtils;
-import org.joda.time.DateTime;
-import util.DateConverter;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -74,7 +63,10 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
     @Override
     public String putItemInStock(String inputJson) {
         Meat addingMeat = (new Gson()).fromJson(inputJson, Meat.class);
+        return GSON.toJson(putItemInStock(addingMeat));
+    }
 
+    private ItemPlace.ItemPlaceList putItemInStock(Meat addingMeat) {
         Warehouse warehouse = CompanyProvider.getInstance().getAppData().getWarehouse();
         List<ItemPlace> itemPlaces = new ArrayList<>();
         boolean addingFinished = false;
@@ -119,13 +111,18 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
 
         ItemPlace.ItemPlaceList itemPlaceList = new ItemPlace.ItemPlaceList();
         itemPlaceList.setItemPlaceList(itemPlaces);
-        return GSON.toJson(itemPlaceList);
-
+        return itemPlaceList;
     }
+
 
     @Override
     public String receivingShipments(String inputJson) {
-        return null;
+        ItemPlace.ItemPlaceList itemPlaceList = new ItemPlace.ItemPlaceList();
+        MeatList meatList = (new Gson()).fromJson(inputJson, MeatList.class);
+        for (Meat meat : meatList.getMeatList()) {
+            itemPlaceList.getItemPlaceList().addAll(putItemInStock(meat).getItemPlaceList());
+        }
+        return GSON.toJson(itemPlaceList);
     }
 
     @Override
@@ -135,7 +132,32 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
 
     @Override
     public String ejectionItems() {
-        return null;
+        EjectionItem.EjectionItemList ejectionItemList = new EjectionItem.EjectionItemList();
+
+        for (CoolingBox coolingBox : CompanyProvider.getInstance().getAppData().getWarehouse().getCoolingBoxes() ) {
+            for (Shelf shelf : coolingBox.getShelves()) {
+                int shelfExpiredCount = 0;
+                List<Meat> meatToDelete = new ArrayList<>();
+                for (Meat meat : shelf.getMeat()) {
+                    if(DateConverter.toDateTimeDots(meat.getExpiryDate()).isBefore(CompanyProvider.getInstance().getCurrentDate().toDateTimeAtStartOfDay())) {
+                        meatToDelete.add(meat);
+                        shelfExpiredCount += meat.getCount();
+                    }
+                }
+
+                if(shelfExpiredCount > 0) {
+                    EjectionItem ejectionItem = new EjectionItem();
+                    ejectionItem.setBoxNumber(coolingBox.getNumber());
+                    ejectionItem.setCount(shelfExpiredCount);
+                    ejectionItem.setShelfNumber(shelf.getNumber());
+                    ejectionItemList.getEjectionItems().add(ejectionItem);
+
+                    shelf.getMeat().removeAll(meatToDelete);
+                }
+            }
+        }
+
+        return GSON.toJson(ejectionItemList);
     }
 
     @Override
@@ -153,13 +175,15 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
         Warehouse warehouse = CompanyProvider.getInstance().getAppData().getWarehouse();
         ItemPlace.ItemPlaceList output = new ItemPlace.ItemPlaceList();
         List<Meat> meats = new ArrayList<>();
+        int durability = input.getDaysDurability();
 
         for (CoolingBox coolingBox : warehouse.getCoolingBoxes()) {
             if(coolingBox.getType().equals(input.getCoolingType())) {
                 for(Shelf shelf : coolingBox.getShelves()) {
                     for(Meat meat : shelf.getMeat()) {
                         if(meat.getMeatType().equals(input.getMeatType())) {
-                            meats.add(meat);
+                            if(durability == 0 || meat.isInDurability(durability))
+                                meats.add(meat);
                         }
                     }
                 }
