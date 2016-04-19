@@ -62,8 +62,7 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
 
     @Override
     public String getPickingItemFromWarehouseByMeatType(String inputJson) {
-        Gson gson = new Gson();
-        ItemPlaceInput input = gson.fromJson(inputJson, ItemPlaceInput.class);
+        ItemPlaceInput input = GSON.fromJson(inputJson, ItemPlaceInput.class);
         Warehouse warehouse = CompanyProvider.getInstance().getAppData().getWarehouse();
         ItemPlace output = new ItemPlace();
         List<Meat> meats = new ArrayList<>();
@@ -81,8 +80,6 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
         }
 
         Collections.sort(meats, new MeatDateComparator());
-
-
 
         return null;
     }
