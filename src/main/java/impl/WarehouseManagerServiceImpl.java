@@ -64,7 +64,6 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
         Warehouse warehouse = CompanyProvider.getInstance().getAppData().getWarehouse();
 
         MeatOrderPlace.MeatOrderPlaceList result = new MeatOrderPlace.MeatOrderPlaceList();
-        MeatOrderPlace meat = new MeatOrderPlace();
         //List<ItemPlace> itemPlaceList = new ArrayList<>();
         ItemPlace.ItemPlaceList itemPlaceList;
 
@@ -76,6 +75,7 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
                 meatOrderPlace.setCount(itemPlace.getCount());
                 meatOrderPlace.setType(meatOrder.getMeatType());
                 meatOrderPlace.setBoxNumber(itemPlace.getBoxNumber());
+                meatOrderPlace.setDateOfExpiration(itemPlace.getDateOfExpiration());
                 result.getMeatOrderPlaceList().add(meatOrderPlace);
             }
 

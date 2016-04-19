@@ -21,7 +21,7 @@ public class Main {
         WarehouseConfigurationService warehouseConfigurationService = new WarehouseConfigurationServiceImpl();
 
         try {
-            String jsonContent = new String(Files.readAllBytes(Paths.get("initSmallWarehouse.json")));
+            String jsonContent = new String(Files.readAllBytes(Paths.get("init1.json")));
             warehouseConfigurationService.initializateWarehouse(jsonContent);
 
             Warehouse w = CompanyProvider.getInstance().getAppData().getWarehouse();
@@ -33,6 +33,10 @@ public class Main {
             String jsonPickItem = new String(Files.readAllBytes(Paths.get("pickItemFromWarehouse.json")));
             String out = warehouseManageService.getPickingItemFromWarehouseByMeatType(jsonPickItem);
             System.out.printf("getPickingItemFromWarhouse" + out);
+
+            String json = new String(Files.readAllBytes(Paths.get("meatOrderPlace.json")));
+            String oout = warehouseManageService.preparationShipmentOfMeat(json);
+            System.out.printf("getPickingItemFromWarhouse" + oout);
 
             String locationOfItemInWarehouse = warehouseManageService.getLocationOfItemInWarehouse("{\"type\":\"CHICKEN\",\"cooling-type\":\"COOLING\"}");
             System.out.println("Item location: " + locationOfItemInWarehouse);
@@ -93,6 +97,7 @@ public class Main {
 
         for (CoolingBox coolingBox : warehouse.getCoolingBoxes()) {
             for(Shelf shelf : coolingBox.getShelves()) {
+                shelf.setCoolingBox(coolingBox);
                 for(Meat meat : shelf.getMeat()) {
                     meat.setShelf(shelf);
                 }
