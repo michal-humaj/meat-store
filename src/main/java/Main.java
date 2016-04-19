@@ -3,9 +3,7 @@ import api.WarehouseManageService;
 import impl.CompanyProvider;
 import impl.WarehouseConfigurationServiceImpl;
 import impl.WarehouseManagerServiceImpl;
-import model.Meat;
-import model.Warehouse;
-import model.AppData;
+import model.*;
 import model.Warehouse;
 
 import java.io.IOException;
