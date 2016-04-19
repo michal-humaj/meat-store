@@ -89,59 +89,12 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
         return GSON.toJson(WarehouseTools.putItemInStock(addingMeat, null));
     }
 
-    private ItemPlace.ItemPlaceList putItemInStock(Meat addingMeat) {
-        Warehouse warehouse = CompanyProvider.getInstance().getAppData().getWarehouse();
-        List<ItemPlace> itemPlaces = new ArrayList<>();
-        boolean addingFinished = false;
-
-        for (CoolingBox cb : warehouse.getCoolingBoxes()) {
-            BoxType meatCooling = addingMeat.isFrozen() ? BoxType.FREEZING : BoxType.COOLING;
-
-            if (!cb.getType().equals(meatCooling)) continue;
-            for (Shelf shelf : cb.getShelves()) {
-
-                if (shelf.getFreeCapacity() == 0){
-                    continue;
-                } else if (addingMeat.getCount() <= shelf.getFreeCapacity()){
-                    shelf.getMeat().add(addingMeat);
-                    ItemPlace itemPlace = new ItemPlace();
-                    itemPlace.setBoxNumber(cb.getNumber());
-                    itemPlace.setShelfNumber(shelf.getNumber());
-                    itemPlace.setCount(addingMeat.getCount());
-                    itemPlaces.add(itemPlace);
-                    addingFinished = true;
-                    break;
-                    // dokoncil som pridavanie masa
-                }else{
-                    Meat divideMeat = SerializationUtils.clone(addingMeat);
-                    addingMeat.setCount(addingMeat.getCount() - shelf.getFreeCapacity());
-                    divideMeat.setCount(shelf.getFreeCapacity());
-                    shelf.getMeat().add(divideMeat);
-                    ItemPlace itemPlace = new ItemPlace();
-                    itemPlace.setBoxNumber(cb.getNumber());
-                    itemPlace.setShelfNumber(shelf.getNumber());
-                    itemPlace.setCount(divideMeat.getCount());
-                    itemPlaces.add(itemPlace);
-                }
-
-            }
-            if (addingFinished) break;
-        }
-        ItemPlace.ItemPlaceList itemPlaceList = new ItemPlace.ItemPlaceList();
-        itemPlaceList.setItemPlaceList(itemPlaces);
-        if (!addingFinished){
-            itemPlaceList.setMessage("Warehouse full, only part of the shipment was stored");
-        }
-        return itemPlaceList;
-    }
-
-
     @Override
     public String receivingShipments(String inputJson) {
         ItemPlace.ItemPlaceList itemPlaceList = new ItemPlace.ItemPlaceList();
         MeatList meatList = (new Gson()).fromJson(inputJson, MeatList.class);
         for (Meat meat : meatList.getMeatList()) {
-            final ItemPlace.ItemPlaceList returned = putItemInStock(meat);
+            final ItemPlace.ItemPlaceList returned = WarehouseTools.putItemInStock(meat, null);
             String message = returned.getMessage();
             itemPlaceList.getItemPlaceList().addAll(returned.getItemPlaceList());
             if (message != null) {

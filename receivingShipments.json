@@ -2,14 +2,14 @@
   "meat-item": [
     {
       "type": "PUFFIN",
-      "count": 84,
+      "count": 10,
       "date-of-slaughter": "22.01.2016",
       "is-frozen": false
     },
     {
-      "type": "CRAB",
-      "count": 1,
-      "date-of-slaughter": "19.01.2016",
+      "type": "CHICKEN",
+      "count": 10,
+      "date-of-slaughter": "19.04.2016",
       "is-frozen": false
     }
   ]

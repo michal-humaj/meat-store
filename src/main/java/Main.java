@@ -21,33 +21,34 @@ public class Main {
         WarehouseConfigurationService warehouseConfigurationService = new WarehouseConfigurationServiceImpl();
 
         try {
-            String jsonContent = new String(Files.readAllBytes(Paths.get("init1.json")));
+            String jsonContent = new String(Files.readAllBytes(Paths.get("initSmallWarehouse.json")));
             warehouseConfigurationService.initializateWarehouse(jsonContent);
 
             Warehouse w = CompanyProvider.getInstance().getAppData().getWarehouse();
             putItemInStock();
 
             receiveShipments();
-
-            addMeats();
-            String jsonPickItem = new String(Files.readAllBytes(Paths.get("pickItemFromWarehouse.json")));
-            String out = warehouseManageService.getPickingItemFromWarehouseByMeatType(jsonPickItem);
-            System.out.printf("getPickingItemFromWarhouse" + out);
-
-            String json = new String(Files.readAllBytes(Paths.get("meatOrderPlace.json")));
-            String oout = warehouseManageService.preparationShipmentOfMeat(json);
-            System.out.printf("getPickingItemFromWarhouse" + oout);
-
-            String locationOfItemInWarehouse = warehouseManageService.getLocationOfItemInWarehouse("{\"type\":\"CHICKEN\",\"cooling-type\":\"COOLING\"}");
-            System.out.println("Item location: " + locationOfItemInWarehouse);
-
-            System.out.println("REPORT " + new String(warehouseManageService.generateReportOnCurrentState()));
-
-            System.out.println("ejection " + warehouseManageService.ejectionItems());
-
-            locationOfItemInWarehouse = warehouseManageService.getLocationOfItemInWarehouse("{\"type\":\"CHICKEN\",\"cooling-type\":\"COOLING\"}");
-            System.out.println("Item location: " + locationOfItemInWarehouse);
-            System.out.println("REPORT " + new String(warehouseManageService.generateReportOnCurrentState()));
+//
+            pickItemFromWarehouse();
+//            addMeats();
+//            String jsonPickItem = new String(Files.readAllBytes(Paths.get("pickItemFromWarehouse.json")));
+//            String out = warehouseManageService.getPickingItemFromWarehouseByMeatType(jsonPickItem);
+//            System.out.printf("getPickingItemFromWarhouse" + out);
+//
+//            String json = new String(Files.readAllBytes(Paths.get("meatOrderPlace.json")));
+//            String oout = warehouseManageService.preparationShipmentOfMeat(json);
+//            System.out.printf("getPickingItemFromWarhouse" + oout);
+//
+//            String locationOfItemInWarehouse = warehouseManageService.getLocationOfItemInWarehouse("{\"type\":\"CHICKEN\",\"cooling-type\":\"COOLING\"}");
+//            System.out.println("Item location: " + locationOfItemInWarehouse);
+//
+//            System.out.println("REPORT " + new String(warehouseManageService.generateReportOnCurrentState()));
+//
+//            System.out.println("ejection " + warehouseManageService.ejectionItems());
+//
+//            locationOfItemInWarehouse = warehouseManageService.getLocationOfItemInWarehouse("{\"type\":\"CHICKEN\",\"cooling-type\":\"COOLING\"}");
+//            System.out.println("Item location: " + locationOfItemInWarehouse);
+//            System.out.println("REPORT " + new String(warehouseManageService.generateReportOnCurrentState()));
 
 
 
@@ -120,6 +121,12 @@ public class Main {
         String addMeat = new String(Files.readAllBytes(Paths.get("meat.json")));
         String out = warehouseManageService.putItemInStock(addMeat);
         System.out.println("Add meat" + out);
+    }
+    public static void pickItemFromWarehouse() throws IOException {
+        WarehouseManageService warehouseManageService = new WarehouseManagerServiceImpl();
+        String addMeat = new String(Files.readAllBytes(Paths.get("pickItemFromWarehouse.json")));
+        String out = warehouseManageService.getPickingItemFromWarehouseByMeatType(addMeat);
+        System.out.println(out);
     }
 
 }

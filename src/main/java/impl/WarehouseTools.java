@@ -47,7 +47,6 @@ public class WarehouseTools {
             if(excludedBoxNumber != null && excludedBoxNumber == cb.getNumber()) {
                 continue;
             }
-
             BoxType meatCooling = addingMeat.isFrozen() ? BoxType.FREEZING : BoxType.COOLING;
 
             if (!cb.getType().equals(meatCooling)) continue;
@@ -56,6 +55,7 @@ public class WarehouseTools {
                 if (shelf.getFreeCapacity() == 0){
                     continue;
                 } else if (addingMeat.getCount() <= shelf.getFreeCapacity()){
+                    addingMeat.setShelf(shelf);
                     shelf.getMeat().add(addingMeat);
                     ItemPlace itemPlace = new ItemPlace();
                     itemPlace.setBoxNumber(cb.getNumber());
@@ -69,6 +69,7 @@ public class WarehouseTools {
                     Meat divideMeat = SerializationUtils.clone(addingMeat);
                     addingMeat.setCount(addingMeat.getCount() - shelf.getFreeCapacity());
                     divideMeat.setCount(shelf.getFreeCapacity());
+                    divideMeat.setShelf(shelf);
                     shelf.getMeat().add(divideMeat);
                     ItemPlace itemPlace = new ItemPlace();
                     itemPlace.setBoxNumber(cb.getNumber());
@@ -80,13 +81,11 @@ public class WarehouseTools {
             }
             if (addingFinished) break;
         }
-
-        if (!addingFinished){
-
-        }
-
         ItemPlace.ItemPlaceList itemPlaceList = new ItemPlace.ItemPlaceList();
         itemPlaceList.setItemPlaceList(itemPlaces);
+        if (!addingFinished){
+            itemPlaceList.setMessage("Only part of the shipment was stored, could not fit more into warehouse");
+        }
         return itemPlaceList;
     }
 }
