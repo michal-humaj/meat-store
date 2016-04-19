@@ -4,7 +4,6 @@ import impl.CompanyProvider;
 import impl.WarehouseConfigurationServiceImpl;
 import impl.WarehouseManagerServiceImpl;
 import model.*;
-import model.Warehouse;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -35,6 +34,17 @@ public class Main {
             String out = warehouseManageService.getPickingItemFromWarehouseByMeatType(jsonPickItem);
             System.out.printf("getPickingItemFromWarhouse" + out);
 
+            String locationOfItemInWarehouse = warehouseManageService.getLocationOfItemInWarehouse("{\"type\":\"CHICKEN\",\"cooling-type\":\"COOLING\"}");
+            System.out.println("Item location: " + locationOfItemInWarehouse);
+
+            System.out.println("REPORT " + new String(warehouseManageService.generateReportOnCurrentState()));
+
+            System.out.println("ejection " + warehouseManageService.ejectionItems());
+
+            locationOfItemInWarehouse = warehouseManageService.getLocationOfItemInWarehouse("{\"type\":\"CHICKEN\",\"cooling-type\":\"COOLING\"}");
+            System.out.println("Item location: " + locationOfItemInWarehouse);
+            System.out.println("REPORT " + new String(warehouseManageService.generateReportOnCurrentState()));
+
 
 
         } catch (IOException e) {
@@ -50,6 +60,7 @@ public class Main {
         Meat meat1 = new Meat();
         Meat meat2 = new Meat();
         Meat meat3 = new Meat();
+        Meat meat4 = new Meat();
 
         meat1.setCount(2);
         meat1.setDate("08.08.2016");
@@ -57,7 +68,7 @@ public class Main {
         meat1.setMeatType(MeatType.CHICKEN);
 
         meat2.setCount(10);
-        meat2.setDate("07.08.2016");
+        meat2.setDate("07.08.2015");
         meat2.setFrozen(false);
         meat2.setMeatType(MeatType.SALMON);
 
@@ -66,11 +77,19 @@ public class Main {
         meat3.setFrozen(false);
         meat3.setMeatType(MeatType.CHICKEN);
 
+        meat4.setCount(12);
+        meat4.setDate("08.04.2015");
+        meat4.setFrozen(false);
+        meat4.setMeatType(MeatType.CHICKEN);
+
         List<Meat> meats = new ArrayList<>();
         meats.add(meat1);
         meats.add(meat2);
         meats.add(meat3);
         warehouse.getCoolingBoxes().get(0).getShelves().get(0).setMeat(meats);
+        warehouse.getCoolingBoxes().get(1).getShelves().get(3).setMeat(new ArrayList<Meat>() {{
+            add(meat4);
+        }});
 
         for (CoolingBox coolingBox : warehouse.getCoolingBoxes()) {
             for(Shelf shelf : coolingBox.getShelves()) {
