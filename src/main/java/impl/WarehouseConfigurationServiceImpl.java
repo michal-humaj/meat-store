@@ -23,5 +23,8 @@ public class WarehouseConfigurationServiceImpl implements WarehouseConfiguration
     public void shiftWarehouseSystemDate() {
         LocalDate date = CompanyProvider.getInstance().getCurrentDate();
         CompanyProvider.getInstance().setCurrentDate(date.plusDays(1));
+
+        String report = Reports.generateCsvReport(CompanyProvider.getInstance().getAppData().getWarehouse());
+        //send report to the manager
     }
 }

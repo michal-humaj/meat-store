@@ -2,15 +2,12 @@ package impl;
 
 import api.WarehouseManageService;
 import com.google.gson.Gson;
-import dto.MeatGroup;
 import dto.input.ItemPlaceInput;
 import dto.output.ItemPlace;
 import model.CoolingBox;
 import model.Meat;
 import model.Shelf;
 import model.Warehouse;
-
-import java.util.HashMap;
 
 
 /**
@@ -69,11 +66,7 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
 
     @Override
     public byte[] generateReportOnCurrentState() {
-        StringBuilder csv = new StringBuilder();
-
-        csv.append("meat-type,count,expiry-date,freezed" + System.lineSeparator());
-
-        return csv.toString().getBytes();
+        return Reports.generateCsvReport(CompanyProvider.getInstance().getAppData().getWarehouse()).getBytes();
     }
 
     @Override
@@ -89,30 +82,5 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
     @Override
     public void emptyCoolingBoxForCleaning(String inputJson) {
 
-    }
-
-    private HashMap<MeatGroup, Integer> getMeatCountByType() {
-        HashMap<MeatGroup, Integer> meatCounts = new HashMap<>();
-
-        for (CoolingBox coolingBox : CompanyProvider.getInstance().getAppData().getWarehouse().getCoolingBoxes()) {
-            for (Shelf shelf : coolingBox.getShelves()) {
-                for (Meat meat : shelf.getMeat()) {
-                    MeatGroup meatGroup = new MeatGroup();
-                    meatGroup.setBoxType(coolingBox.getType());
-                    meatGroup.setExpiryDate(meat.getExpiryDate());
-                    meatGroup.setMeatType(meat.getMeatType());
-
-                    int totalCount = 0;
-                    if(meatCounts.containsKey(meatGroup)) {
-                        totalCount = meatCounts.get(meatGroup);
-                    }
-
-                    totalCount += meat.getCount();
-                    meatCounts.put(meatGroup, totalCount);
-                }
-            }
-        }
-
-        return meatCounts;
     }
 }
