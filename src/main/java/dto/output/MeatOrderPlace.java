@@ -2,7 +2,9 @@ package dto.output;
 
 import com.google.gson.annotations.SerializedName;
 import model.MeatType;
-import org.joda.time.DateTime;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -17,7 +19,7 @@ public class MeatOrderPlace {
     private Enum<MeatType> type;
     private int count;
     @SerializedName("date-of-expiration")
-    private DateTime dateOfExpiration;
+    private String dateOfExpiration;
 
     public int getBoxNumber() {
         return boxNumber;
@@ -35,7 +37,40 @@ public class MeatOrderPlace {
         return count;
     }
 
-    public DateTime getDateOfExpiration() {
+    public String getDateOfExpiration() {
         return dateOfExpiration;
+    }
+
+    public void setBoxNumber(int boxNumber) {
+        this.boxNumber = boxNumber;
+    }
+
+    public void setShelfNumber(String shelfNumber) {
+        this.shelfNumber = shelfNumber;
+    }
+
+    public void setType(Enum<MeatType> type) {
+        this.type = type;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public void setDateOfExpiration(String dateOfExpiration) {
+        this.dateOfExpiration = dateOfExpiration;
+    }
+
+    public static class MeatOrderPlaceList {
+        @SerializedName("meat-order-place")
+        private List<MeatOrderPlace> meatOrderPlaceList = new ArrayList<>();
+
+        public List<MeatOrderPlace> getMeatOrderPlaceList() {
+            return meatOrderPlaceList;
+        }
+
+        public void setMeatOrderPlaceList(List<MeatOrderPlace> meatOrderPlaceList) {
+            this.meatOrderPlaceList = meatOrderPlaceList;
+        }
     }
 }

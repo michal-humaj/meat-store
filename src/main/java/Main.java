@@ -4,6 +4,7 @@ import impl.CompanyProvider;
 import impl.WarehouseConfigurationServiceImpl;
 import impl.WarehouseManagerServiceImpl;
 import model.*;
+import model.Warehouse;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -73,7 +74,7 @@ public class Main {
         meat2.setMeatType(MeatType.SALMON);
 
         meat3.setCount(2);
-        meat3.setDate("08.06.2016");
+        meat3.setDate("08.03.2016");
         meat3.setFrozen(false);
         meat3.setMeatType(MeatType.CHICKEN);
 
@@ -98,13 +99,5 @@ public class Main {
                 }
             }
         }
-    }
-
-    public static void receiveShipments() throws IOException {
-        WarehouseManageService warehouseManageService = new WarehouseManagerServiceImpl();
-
-        String receivingShipments = new String(Files.readAllBytes(Paths.get("receivingShipments.json")));
-        String out = warehouseManageService.receivingShipments(receivingShipments);
-        System.out.println("receiving shipments" + out);
     }
 }

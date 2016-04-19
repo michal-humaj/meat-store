@@ -49,6 +49,18 @@ public class Meat implements Serializable {
         return DateConverter.toStringDots(slaughterDate.plusDays(getMeatType().getFreshDays()));
     }
 
+    public int getDurabilitDate(){
+        DateTimeFormatter dtfOut = DateTimeFormat.forPattern("MMddyyyy");
+        int now = Integer.valueOf(dtfOut.print(DateTime.now()));
+        int expiry = Integer.valueOf(dtfOut.print(DateConverter.toDateTimeDots(getDate())));
+
+        if (expiry > now){
+            return now-expiry;
+        }
+
+        return -1;
+    }
+
     public void setDate(String date) {
         this.date = date;
     }
@@ -74,6 +86,8 @@ public class Meat implements Serializable {
     }
 
     public boolean isInDurability(int days) {
-        return false;
+        LocalDate day = CompanyProvider.getInstance().getCurrentDate().plusDays(days);
+
+        return DateConverter.toDateTimeDots(getExpiryDate()).isAfter(day.toDateTimeAtStartOfDay());
     }
 }
