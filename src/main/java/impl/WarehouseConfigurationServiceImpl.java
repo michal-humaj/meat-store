@@ -38,5 +38,6 @@ public class WarehouseConfigurationServiceImpl implements WarehouseConfiguration
 
         String report = Reports.generateCsvReportForMeatWithIncomingExpiryDate(CompanyProvider.getInstance().getAppData().getWarehouse());
         //send report to the manager
+        System.out.println(report);
     }
 }

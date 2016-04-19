@@ -2,14 +2,15 @@ package impl;
 
 import api.WarehouseManageService;
 import com.google.gson.Gson;
-import dto.input.EjectionItem;
-import dto.input.ItemPlaceInput;
-import dto.input.MeatList;
-import dto.input.MeatOrder;
+import dto.input.*;
 import dto.output.ItemPlace;
 import dto.output.MeatOrderPlace;
-import model.*;
-import org.apache.commons.lang3.SerializationUtils;
+import dto.output.MoveItem;
+import model.CoolingBox;
+import model.Meat;
+import model.Shelf;
+import model.Warehouse;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import util.DateConverter;
 import util.MeatDateComparator;
 
@@ -87,55 +88,7 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
     @Override
     public String putItemInStock(String inputJson) {
         Meat addingMeat = (new Gson()).fromJson(inputJson, Meat.class);
-        return GSON.toJson(putItemInStock(addingMeat));
-    }
-
-    private ItemPlace.ItemPlaceList putItemInStock(Meat addingMeat) {
-        Warehouse warehouse = CompanyProvider.getInstance().getAppData().getWarehouse();
-        List<ItemPlace> itemPlaces = new ArrayList<>();
-        boolean addingFinished = false;
-
-        for (CoolingBox cb : warehouse.getCoolingBoxes()) {
-            BoxType meatCooling = addingMeat.isFrozen() ? BoxType.FREEZING : BoxType.COOLING;
-
-            if (!cb.getType().equals(meatCooling)) continue;
-            for (Shelf shelf : cb.getShelves()) {
-
-                if (shelf.getFreeCapacity() == 0){
-                    continue;
-                } else if (addingMeat.getCount() <= shelf.getFreeCapacity()){
-                    shelf.getMeat().add(addingMeat);
-                    ItemPlace itemPlace = new ItemPlace();
-                    itemPlace.setBoxNumber(cb.getNumber());
-                    itemPlace.setShelfNumber(shelf.getNumber());
-                    itemPlace.setCount(addingMeat.getCount());
-                    itemPlaces.add(itemPlace);
-                    addingFinished = true;
-                    break;
-                    // dokoncil som pridavanie masa
-                }else{
-                    Meat divideMeat = SerializationUtils.clone(addingMeat);
-                    addingMeat.setCount(addingMeat.getCount() - shelf.getFreeCapacity());
-                    divideMeat.setCount(shelf.getFreeCapacity());
-                    shelf.getMeat().add(divideMeat);
-                    ItemPlace itemPlace = new ItemPlace();
-                    itemPlace.setBoxNumber(cb.getNumber());
-                    itemPlace.setShelfNumber(shelf.getNumber());
-                    itemPlace.setCount(divideMeat.getCount());
-                    itemPlaces.add(itemPlace);
-                }
-
-            }
-            if (addingFinished) break;
-        }
-
-        if (!addingFinished){
-
-        }
-
-        ItemPlace.ItemPlaceList itemPlaceList = new ItemPlace.ItemPlaceList();
-        itemPlaceList.setItemPlaceList(itemPlaces);
-        return itemPlaceList;
+        return GSON.toJson(WarehouseTools.putItemInStock(addingMeat, null));
     }
 
 
@@ -144,7 +97,7 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
         ItemPlace.ItemPlaceList itemPlaceList = new ItemPlace.ItemPlaceList();
         MeatList meatList = (new Gson()).fromJson(inputJson, MeatList.class);
         for (Meat meat : meatList.getMeatList()) {
-            itemPlaceList.getItemPlaceList().addAll(putItemInStock(meat).getItemPlaceList());
+            itemPlaceList.getItemPlaceList().addAll(WarehouseTools.putItemInStock(meat, null).getItemPlaceList());
         }
         return GSON.toJson(itemPlaceList);
     }
@@ -184,14 +137,53 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
         return GSON.toJson(ejectionItemList);
     }
 
+    /**
+     * Not implemented
+     * @param inputJson
+     */
     @Override
     public void moveItem(String inputJson) {
-
+        throw new NotImplementedException();
     }
 
     @Override
-    public void emptyCoolingBoxForCleaning(String inputJson) {
+    public String emptyCoolingBoxForCleaning(String inputJson) {
+        int boxToEmpty = GSON.fromJson(inputJson, BoxToEmpty.class).getBoxNumber();
 
+        MoveItem.MoveItemList moveItemList = new MoveItem.MoveItemList();
+
+        for (CoolingBox coolingBox : CompanyProvider.getInstance().getAppData().getWarehouse().getCoolingBoxes()) {
+            if(coolingBox.getNumber() == boxToEmpty) {
+                for (Shelf shelf : coolingBox.getShelves()) {
+                    for (Meat meat : shelf.getMeat()) {
+                        ItemPlace.ItemPlaceList itemPlaceList = WarehouseTools.putItemInStock(meat, boxToEmpty);
+
+                        for (ItemPlace itemPlace : itemPlaceList.getItemPlaceList()) {
+                            MoveItem moveItem = new MoveItem();
+                            moveItem.setMeatType(meat.getMeatType());
+                            moveItem.setDateOfExpiration(meat.getExpiryDate());
+
+                            MoveItem.MoveItemPlace currentItemPlace = new MoveItem.MoveItemPlace();
+                            currentItemPlace.setBoxNumber(boxToEmpty);
+                            currentItemPlace.setShelfNumber(shelf.getNumber());
+                            moveItem.setCurrentItemPlace(currentItemPlace);
+
+                            MoveItem.MoveItemPlace newItemPlace = new MoveItem.MoveItemPlace();
+                            newItemPlace.setBoxNumber(itemPlace.getBoxNumber());
+                            newItemPlace.setShelfNumber(itemPlace.getShelfNumber());
+                            moveItem.setNewItemPlace(newItemPlace);
+
+                            moveItemList.getMoveItemList().add(moveItem);
+                        }
+
+                    }
+                    shelf.getMeat().clear();
+                }
+                break;
+            }
+        }
+
+        return GSON.toJson(moveItemList);
     }
 
     private ItemPlace.ItemPlaceList getPickingItemFromWarehouseByMeatTypeImpl(String inputJson) {
