@@ -64,60 +64,7 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
 
     @Override
     public String getPickingItemFromWarehouseByMeatType(String inputJson) {
-        ItemPlaceInput input = GSON.fromJson(inputJson, ItemPlaceInput.class);
-        Warehouse warehouse = CompanyProvider.getInstance().getAppData().getWarehouse();
-        ItemPlace.ItemPlaceList output = new ItemPlace.ItemPlaceList();
-        List<Meat> meats = new ArrayList<>();
-
-        for (CoolingBox coolingBox : warehouse.getCoolingBoxes()) {
-            if(coolingBox.getType().equals(input.getCoolingType())) {
-                for(Shelf shelf : coolingBox.getShelves()) {
-                    for(Meat meat : shelf.getMeat()) {
-                        if(meat.getMeatType().equals(input.getMeatType())) {
-                            meats.add(meat);
-                        }
-                    }
-                }
-            }
-        }
-
-        Collections.sort(meats, new MeatDateComparator());
-
-        int meatMissing = input.getCount();
-        Shelf meatShelf;
-        int meatTaken;
-        for(Meat meat : meats) {
-            meatShelf = meat.getShelf();
-            meatTaken = meatMissing;
-
-            if((meatMissing - meat.getCount()) == 0) {
-                meatShelf.getMeat().remove(meat);
-                meatTaken = meat.getCount();
-                meatMissing = 0;
-            }
-            else if((meatMissing - meat.getCount()) > 0) {
-                meatShelf.getMeat().remove(meat);
-                meatTaken = meat.getCount();
-                meatMissing -= meat.getCount();
-            }
-            else {
-                meat.setCount(meat.getCount() - meatTaken);
-                meatMissing = 0;
-            }
-
-            meatShelf.setCapacity(meatShelf.getCapacity() + meatTaken);
-
-            ItemPlace itemPlace = new ItemPlace();
-            itemPlace.setBoxNumber(meatShelf.getCoolingBox().getNumber());
-            itemPlace.setCount(meatTaken);
-            itemPlace.setDateOfExpiration(meat.getExpiryDate());
-            itemPlace.setShelfNumber(meatShelf.getNumber());
-            output.getItemPlaceList().add(itemPlace);
-
-            if(meatMissing == 0) break;
-        }
-
-        return GSON.toJson(output);
+        return GSON.toJson(getPickingItemFromWarehouseByMeatTypeImpl(inputJson));
     }
 
     @Override
@@ -208,5 +155,62 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
     @Override
     public void emptyCoolingBoxForCleaning(String inputJson) {
 
+    }
+
+    private ItemPlace.ItemPlaceList getPickingItemFromWarehouseByMeatTypeImpl(String inputJson) {
+        ItemPlaceInput input = GSON.fromJson(inputJson, ItemPlaceInput.class);
+        Warehouse warehouse = CompanyProvider.getInstance().getAppData().getWarehouse();
+        ItemPlace.ItemPlaceList output = new ItemPlace.ItemPlaceList();
+        List<Meat> meats = new ArrayList<>();
+
+        for (CoolingBox coolingBox : warehouse.getCoolingBoxes()) {
+            if(coolingBox.getType().equals(input.getCoolingType())) {
+                for(Shelf shelf : coolingBox.getShelves()) {
+                    for(Meat meat : shelf.getMeat()) {
+                        if(meat.getMeatType().equals(input.getMeatType())) {
+                            meats.add(meat);
+                        }
+                    }
+                }
+            }
+        }
+
+        Collections.sort(meats, new MeatDateComparator());
+
+        int meatMissing = input.getCount();
+        Shelf meatShelf;
+        int meatTaken;
+        for(Meat meat : meats) {
+            meatShelf = meat.getShelf();
+            meatTaken = meatMissing;
+
+            if((meatMissing - meat.getCount()) == 0) {
+                meatShelf.getMeat().remove(meat);
+                meatTaken = meat.getCount();
+                meatMissing = 0;
+            }
+            else if((meatMissing - meat.getCount()) > 0) {
+                meatShelf.getMeat().remove(meat);
+                meatTaken = meat.getCount();
+                meatMissing -= meat.getCount();
+            }
+            else {
+                meat.setCount(meat.getCount() - meatTaken);
+                meatMissing = 0;
+            }
+
+            meatShelf.setCapacity(meatShelf.getCapacity() + meatTaken);
+
+            ItemPlace itemPlace = new ItemPlace();
+            itemPlace.setBoxNumber(meatShelf.getCoolingBox().getNumber());
+            itemPlace.setCount(meatTaken);
+            itemPlace.setDateOfExpiration(meat.getExpiryDate());
+            itemPlace.setShelfNumber(meatShelf.getNumber());
+            output.getItemPlaceList().add(itemPlace);
+
+            if(meatMissing == 0) break;
+        }
+
+        return output;
     }
 }
