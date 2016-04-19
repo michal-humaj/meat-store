@@ -9,9 +9,30 @@ import java.util.List;
 public class CoolingBox {
 
     private int number;
-    private List<Shelf> shelves = new ArrayList<Shelf>();
+    private List<Shelf> shelfs = new ArrayList<Shelf>();
     private BoxType type;
 
+    public int getNumber() {
+        return number;
+    }
 
+    public void setNumber(int number) {
+        this.number = number;
+    }
 
+    public List<Shelf> getShelves() {
+        return shelfs;
+    }
+
+    public void setShelves(List<Shelf> shelves) {
+        this.shelfs = shelves;
+    }
+
+    public BoxType getType() {
+        return type;
+    }
+
+    public void setType(BoxType type) {
+        this.type = type;
+    }
 }
