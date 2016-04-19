@@ -4,14 +4,14 @@ package model;
  * Created by Rex on 19.4.2016.
  */
 public class AppData {
-    private AppData company;
+    private Company company;
     private Warehouse warehouse;
 
-    public AppData getCompany() {
+    public Company getCompany() {
         return company;
     }
 
-    public void setCompany(AppData company) {
+    public void setCompany(Company company) {
         this.company = company;
     }
 
