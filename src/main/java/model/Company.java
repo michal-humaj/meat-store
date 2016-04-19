@@ -1,7 +1,6 @@
 package model;
 
 import com.google.gson.annotations.SerializedName;
-import org.joda.time.DateTime;
 
 import java.util.HashMap;
 
@@ -13,13 +12,11 @@ public class Company {
     private String name;
 
     @SerializedName("founding-date")
-    private DateTime foundingDate;
+    private String foundingDate;
 
     private Employee director;
 
     private HashMap employees;
-
-    private Warehouse warehouse;
 
     public String getName() {
         return name;
@@ -29,11 +26,11 @@ public class Company {
         this.name = name;
     }
 
-    public DateTime getFoundingDate() {
+    public String getFoundingDate() {
         return foundingDate;
     }
 
-    public void setFoundingDate(DateTime foundingDate) {
+    public void setFoundingDate(String foundingDate) {
         this.foundingDate = foundingDate;
     }
 
@@ -53,11 +50,4 @@ public class Company {
         this.employees = employees;
     }
 
-    public Warehouse getWarehouse() {
-        return warehouse;
-    }
-
-    public void setWarehouse(Warehouse warehouse) {
-        this.warehouse = warehouse;
-    }
 }

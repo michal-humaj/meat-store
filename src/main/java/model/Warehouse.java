@@ -1,5 +1,7 @@
 package model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -7,7 +9,9 @@ import java.util.List;
  */
 public class Warehouse {
 
+    @SerializedName("cooling-boxes")
     private List<CoolingBox> coolingBoxes;
+    @SerializedName("serial-number")
     private String serialNumber;
 
     public List<CoolingBox> getCoolingBoxes() {
