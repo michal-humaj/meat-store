@@ -2,14 +2,15 @@ package impl;
 
 import api.WarehouseManageService;
 import com.google.gson.Gson;
+import dto.MeatGroup;
 import dto.input.ItemPlaceInput;
 import dto.output.ItemPlace;
 import model.CoolingBox;
 import model.Meat;
 import model.Shelf;
 import model.Warehouse;
-import org.joda.time.DateTime;
-import util.DateConverter;
+
+import java.util.HashMap;
 
 
 /**
@@ -30,15 +31,12 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
         for (CoolingBox coolingBox : warehouse.getCoolingBoxes()) {
             for (Shelf shelf : coolingBox.getShelves()) {
                 for (Meat meat : shelf.getMeat()) {
-                    if(meat.getMeatType().equals(itemPlaceInput.getMeatType())) {
+                    if(meat.getMeatType().equals(itemPlaceInput.getMeatType()) &&
+                            coolingBox.getType().equals(itemPlaceInput.getCoolingType())) {
                         ItemPlace itemPlace = new ItemPlace();
                         itemPlace.setBoxNumber(coolingBox.getNumber());
                         itemPlace.setCount(meat.getCount());
-
-                        DateTime slaughterDate = DateConverter.toDateTimeDots(meat.getDate());
-                        DateTime expiryDate = slaughterDate.plusDays(meat.getMeatType().getFreshDays());
-
-                        itemPlace.setDateOfExpiration(DateConverter.toStringDots(expiryDate));
+                        itemPlace.setDateOfExpiration(meat.getExpiryDate());
                         itemPlace.setShelfNumber(shelf.getNumber());
                         result.getItemPlaceList().add(itemPlace);
                     }
@@ -71,7 +69,11 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
 
     @Override
     public byte[] generateReportOnCurrentState() {
-        return new byte[0];
+        StringBuilder csv = new StringBuilder();
+
+        csv.append("meat-type,count,expiry-date,freezed" + System.lineSeparator());
+
+        return csv.toString().getBytes();
     }
 
     @Override
@@ -87,5 +89,30 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
     @Override
     public void emptyCoolingBoxForCleaning(String inputJson) {
 
+    }
+
+    private HashMap<MeatGroup, Integer> getMeatCountByType() {
+        HashMap<MeatGroup, Integer> meatCounts = new HashMap<>();
+
+        for (CoolingBox coolingBox : CompanyProvider.getInstance().getAppData().getWarehouse().getCoolingBoxes()) {
+            for (Shelf shelf : coolingBox.getShelves()) {
+                for (Meat meat : shelf.getMeat()) {
+                    MeatGroup meatGroup = new MeatGroup();
+                    meatGroup.setBoxType(coolingBox.getType());
+                    meatGroup.setExpiryDate(meat.getExpiryDate());
+                    meatGroup.setMeatType(meat.getMeatType());
+
+                    int totalCount = 0;
+                    if(meatCounts.containsKey(meatGroup)) {
+                        totalCount = meatCounts.get(meatGroup);
+                    }
+
+                    totalCount += meat.getCount();
+                    meatCounts.put(meatGroup, totalCount);
+                }
+            }
+        }
+
+        return meatCounts;
     }
 }

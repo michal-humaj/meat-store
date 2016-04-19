@@ -1,6 +1,8 @@
 package model;
 
 import com.google.gson.annotations.SerializedName;
+import org.joda.time.DateTime;
+import util.DateConverter;
 
 /**
  * Created by Rex on 19.4.2016.
@@ -35,6 +37,11 @@ public class Meat {
 
     public String getDate() {
         return date;
+    }
+
+    public String getExpiryDate() {
+        DateTime slaughterDate = DateConverter.toDateTimeDots(getDate());
+        return DateConverter.toStringDots(slaughterDate.plusDays(getMeatType().getFreshDays()));
     }
 
     public void setDate(String date) {
