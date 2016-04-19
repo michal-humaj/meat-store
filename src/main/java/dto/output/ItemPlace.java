@@ -54,12 +54,23 @@ public class ItemPlace {
         @SerializedName("item-place")
         private List<ItemPlace> itemPlaceList = new ArrayList<>();
 
+        @SerializedName("error-message")
+        private String message;
+
         public List<ItemPlace> getItemPlaceList() {
             return itemPlaceList;
         }
 
         public void setItemPlaceList(List<ItemPlace> itemPlaceList) {
             this.itemPlaceList = itemPlaceList;
+        }
+
+        public String getMessage() {
+            return message;
+        }
+
+        public void setMessage(String message) {
+            this.message = message;
         }
     }
 }

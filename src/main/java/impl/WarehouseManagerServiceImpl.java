@@ -2,14 +2,13 @@ package impl;
 
 import api.WarehouseManageService;
 import com.google.gson.Gson;
-import dto.input.EjectionItem;
-import dto.input.ItemPlaceInput;
-import dto.input.MeatList;
-import dto.input.MeatOrder;
+import dto.input.*;
 import dto.output.ItemPlace;
 import dto.output.MeatOrderPlace;
+import dto.output.MoveItem;
 import model.*;
 import org.apache.commons.lang3.SerializationUtils;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import util.DateConverter;
 import util.MeatDateComparator;
 
@@ -87,7 +86,7 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
     @Override
     public String putItemInStock(String inputJson) {
         Meat addingMeat = (new Gson()).fromJson(inputJson, Meat.class);
-        return GSON.toJson(putItemInStock(addingMeat));
+        return GSON.toJson(WarehouseTools.putItemInStock(addingMeat, null));
     }
 
     private ItemPlace.ItemPlaceList putItemInStock(Meat addingMeat) {
@@ -128,13 +127,11 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
             }
             if (addingFinished) break;
         }
-
-        if (!addingFinished){
-
-        }
-
         ItemPlace.ItemPlaceList itemPlaceList = new ItemPlace.ItemPlaceList();
         itemPlaceList.setItemPlaceList(itemPlaces);
+        if (!addingFinished){
+            itemPlaceList.setMessage("Warehouse full, only part of the shipment was stored");
+        }
         return itemPlaceList;
     }
 
@@ -144,7 +141,13 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
         ItemPlace.ItemPlaceList itemPlaceList = new ItemPlace.ItemPlaceList();
         MeatList meatList = (new Gson()).fromJson(inputJson, MeatList.class);
         for (Meat meat : meatList.getMeatList()) {
-            itemPlaceList.getItemPlaceList().addAll(putItemInStock(meat).getItemPlaceList());
+            final ItemPlace.ItemPlaceList returned = putItemInStock(meat);
+            String message = returned.getMessage();
+            itemPlaceList.getItemPlaceList().addAll(returned.getItemPlaceList());
+            if (message != null) {
+                itemPlaceList.setMessage(message);
+            }
+
         }
         return GSON.toJson(itemPlaceList);
     }
@@ -184,14 +187,53 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
         return GSON.toJson(ejectionItemList);
     }
 
+    /**
+     * Not implemented
+     * @param inputJson
+     */
     @Override
     public void moveItem(String inputJson) {
-
+        throw new NotImplementedException();
     }
 
     @Override
-    public void emptyCoolingBoxForCleaning(String inputJson) {
+    public String emptyCoolingBoxForCleaning(String inputJson) {
+        int boxToEmpty = GSON.fromJson(inputJson, BoxToEmpty.class).getBoxNumber();
 
+        MoveItem.MoveItemList moveItemList = new MoveItem.MoveItemList();
+
+        for (CoolingBox coolingBox : CompanyProvider.getInstance().getAppData().getWarehouse().getCoolingBoxes()) {
+            if(coolingBox.getNumber() == boxToEmpty) {
+                for (Shelf shelf : coolingBox.getShelves()) {
+                    for (Meat meat : shelf.getMeat()) {
+                        ItemPlace.ItemPlaceList itemPlaceList = WarehouseTools.putItemInStock(meat, boxToEmpty);
+
+                        for (ItemPlace itemPlace : itemPlaceList.getItemPlaceList()) {
+                            MoveItem moveItem = new MoveItem();
+                            moveItem.setMeatType(meat.getMeatType());
+                            moveItem.setDateOfExpiration(meat.getExpiryDate());
+
+                            MoveItem.MoveItemPlace currentItemPlace = new MoveItem.MoveItemPlace();
+                            currentItemPlace.setBoxNumber(boxToEmpty);
+                            currentItemPlace.setShelfNumber(shelf.getNumber());
+                            moveItem.setCurrentItemPlace(currentItemPlace);
+
+                            MoveItem.MoveItemPlace newItemPlace = new MoveItem.MoveItemPlace();
+                            newItemPlace.setBoxNumber(itemPlace.getBoxNumber());
+                            newItemPlace.setShelfNumber(itemPlace.getShelfNumber());
+                            moveItem.setNewItemPlace(newItemPlace);
+
+                            moveItemList.getMoveItemList().add(moveItem);
+                        }
+
+                    }
+                    shelf.getMeat().clear();
+                }
+                break;
+            }
+        }
+
+        return GSON.toJson(moveItemList);
     }
 
     private ItemPlace.ItemPlaceList getPickingItemFromWarehouseByMeatTypeImpl(String inputJson) {

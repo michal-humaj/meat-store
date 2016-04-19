@@ -137,6 +137,6 @@ public interface WarehouseManageService {
 	 * 
 	 * @param { "boxNumber" : "10" }
 	 */
-	public void emptyCoolingBoxForCleaning(String inputJson);
+	public String emptyCoolingBoxForCleaning(String inputJson);
 	
 }

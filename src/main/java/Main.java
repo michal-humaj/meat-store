@@ -25,7 +25,7 @@ public class Main {
             warehouseConfigurationService.initializateWarehouse(jsonContent);
 
             Warehouse w = CompanyProvider.getInstance().getAppData().getWarehouse();
-
+            putItemInStock();
 
             receiveShipments();
 
@@ -111,6 +111,15 @@ public class Main {
         String receivingShipments = new String(Files.readAllBytes(Paths.get("receivingShipments.json")));
         String out = warehouseManageService.receivingShipments(receivingShipments);
         System.out.println("receiving shipments" + out);
+    }
+
+
+    public static void putItemInStock() throws IOException {
+        WarehouseManageService warehouseManageService = new WarehouseManagerServiceImpl();
+
+        String addMeat = new String(Files.readAllBytes(Paths.get("meat.json")));
+        String out = warehouseManageService.putItemInStock(addMeat);
+        System.out.println("Add meat" + out);
     }
 
 }
