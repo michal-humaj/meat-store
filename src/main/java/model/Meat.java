@@ -72,4 +72,8 @@ public class Meat implements Serializable {
     public boolean isExpired() {
         return DateConverter.toDateTimeDots(getExpiryDate()).isBeforeNow();
     }
+
+    public boolean isInDurability(int days) {
+        return false;
+    }
 }
