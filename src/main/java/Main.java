@@ -22,17 +22,18 @@ public class Main {
         WarehouseConfigurationService warehouseConfigurationService = new WarehouseConfigurationServiceImpl();
 
         try {
-            String jsonContent = new String(Files.readAllBytes(Paths.get("init1.json")));
+            String jsonContent = new String(Files.readAllBytes(Paths.get("initSmallWarehouse.json")));
             warehouseConfigurationService.initializateWarehouse(jsonContent);
+
+            Warehouse w = CompanyProvider.getInstance().getAppData().getWarehouse();
+
 
             receiveShipments();
 
             addMeats();
             String jsonPickItem = new String(Files.readAllBytes(Paths.get("pickItemFromWarehouse.json")));
             String out = warehouseManageService.getPickingItemFromWarehouseByMeatType(jsonPickItem);
-
-            Warehouse w = CompanyProvider.getInstance().getAppData().getWarehouse();
-            System.out.printf(out);
+            System.out.printf("getPickingItemFromWarhouse" + out);
 
 
 

@@ -1,0 +1,134 @@
+{
+  "company":
+  {
+    "name": "Maso Slany s.r.o.",
+    "founding-date": "21/11/2007",
+    "director":
+    {
+      "name": "Karel",
+      "surname": "Vomacka",
+      "email": "karel.vomacka@maso-slany.cz",
+      "phone": "+420 739 549 278"
+    },
+
+    "employees":
+    {
+      "dealers":
+      [
+        {
+          "name": "Karel",
+          "surname": "Vomacka",
+          "email": "karel.vomacka@maso-slany.cz",
+          "phone": "+420 739 549 278"
+        }
+      ],
+
+      "cleaning-mans":
+      [
+        {
+          "name": "Romana",
+          "surname": "Vomackova",
+          "phone": "+420 733 652 212"
+        }
+      ],
+
+      "warehousemans":
+      [
+        {
+          "name": "Pavel",
+          "surname": "Erben",
+          "email": "pavel.erben@maso-slany.cz",
+          "phone": "+420 739 549 281"
+        },
+
+        {
+          "name": "Marcel",
+          "surname": "Novak",
+          "email": "marcel.novak@maso-slany.cz",
+          "phone": "+420 739 549 285"
+        },
+
+        {
+          "name": "Jan",
+          "surname": "Hruby",
+          "email": "jan.hruby@maso-slany.cz",
+          "phone": "+420 739 549 282"
+        }
+      ]
+    }
+  },
+
+  "warehouse":
+  {
+    "serial-number": "NR-SLANY-920349",
+    "cooling-boxes":
+    [
+      {
+        "number": "58",
+        "type": "FREEZING",
+        "shelfs":
+        [
+          {
+            "number": "k11",
+            "capacity": 169
+          },
+
+          {
+            "number": "j8",
+            "capacity": 152
+          }
+        ]
+      },
+
+      {
+        "number": "55",
+        "type": "FREEZING",
+        "shelfs":
+        [
+          {
+            "number": "k11",
+            "capacity": 100
+          },
+
+          {
+            "number": "g9",
+            "capacity": 154
+          }
+        ]
+      },
+
+      {
+        "number": "33",
+        "type": "COOLING",
+        "shelfs":
+        [
+
+          {
+            "number": "s11",
+            "capacity": 280
+          }
+        ]
+      },
+
+      {
+        "number": "82",
+        "type": "COOLING",
+        "shelfs":
+        [
+
+          {
+            "number": "m12",
+            "capacity": 117
+          },
+
+          {
+            "number": "u9",
+            "capacity": 46
+          }
+        ]
+      }
+
+
+    ]
+  }
+}
