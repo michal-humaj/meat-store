@@ -4,10 +4,12 @@ import com.google.gson.annotations.SerializedName;
 import org.joda.time.DateTime;
 import util.DateConverter;
 
+import java.io.Serializable;
+
 /**
  * Created by Rex on 19.4.2016.
  */
-public class Meat {
+public class Meat implements Serializable {
 
     private MeatType meatType;
 
@@ -18,6 +20,8 @@ public class Meat {
 
     @SerializedName("is-frozen")
     private boolean frozen;
+
+    private Shelf shelf;
 
     public MeatType getMeatType() {
         return meatType;
@@ -54,5 +58,13 @@ public class Meat {
 
     public void setFrozen(boolean frozen) {
         this.frozen = frozen;
+    }
+
+    public Shelf getShelf() {
+        return shelf;
+    }
+
+    public void setShelf(Shelf shelf) {
+        this.shelf = shelf;
     }
 }

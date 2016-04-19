@@ -2,12 +2,28 @@ package impl;
 
 import api.WarehouseManageService;
 import com.google.gson.Gson;
+import com.sun.org.apache.xpath.internal.axes.IteratorPool;
+import dto.MeatGroup;
 import dto.input.ItemPlaceInput;
 import dto.output.ItemPlace;
+import model.*;
+import org.joda.time.DateTime;
+import util.DateConverter;
+import util.MeatDateComparator;
 import model.CoolingBox;
 import model.Meat;
 import model.Shelf;
 import model.Warehouse;
+import model.*;
+import org.apache.commons.lang3.SerializationUtils;
+import org.joda.time.DateTime;
+import util.DateConverter;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 
 /**
@@ -46,6 +62,28 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
 
     @Override
     public String getPickingItemFromWarehouseByMeatType(String inputJson) {
+        Gson gson = new Gson();
+        ItemPlaceInput input = gson.fromJson(inputJson, ItemPlaceInput.class);
+        Warehouse warehouse = CompanyProvider.getInstance().getAppData().getWarehouse();
+        ItemPlace output = new ItemPlace();
+        List<Meat> meats = new ArrayList<>();
+
+        for (CoolingBox coolingBox : warehouse.getCoolingBoxes()) {
+            if(coolingBox.getType().equals(input.getCoolingType())) {
+                for(Shelf shelf : coolingBox.getShelves()) {
+                    for(Meat meat : shelf.getMeat()) {
+                        if(meat.getMeatType().equals(input.getMeatType())) {
+                            meats.add(meat);
+                        }
+                    }
+                }
+            }
+        }
+
+        Collections.sort(meats, new MeatDateComparator());
+
+
+
         return null;
     }
 
@@ -56,7 +94,50 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
 
     @Override
     public String putItemInStock(String inputJson) {
-        return null;
+        Meat addingMeat = (new Gson()).fromJson(inputJson, Meat.class);
+
+        Warehouse warehouse = CompanyProvider.getInstance().getAppData().getWarehouse();
+        List<ItemPlace> itemPlaces = new ArrayList<>();
+        boolean addingFinished = false;
+
+        for (CoolingBox cb : warehouse.getCoolingBoxes()) {
+            BoxType meatCooling = addingMeat.isFrozen() ? BoxType.FREEZING : BoxType.COOLING;
+
+            if (!cb.getType().equals(meatCooling)) continue;
+            for (Shelf shelf : cb.getShelves()) {
+
+                if (shelf.getFreeCapacity() == 0){
+                    continue;
+                } else if (addingMeat.getCount() < shelf.getFreeCapacity()){
+                    shelf.getMeat().add(addingMeat);
+                    ItemPlace itemPlace = new ItemPlace();
+                    itemPlace.setBoxNumber(cb.getNumber());
+                    itemPlace.setShelfNumber(shelf.getNumber());
+                    itemPlace.setCount(addingMeat.getCount());
+                    itemPlaces.add(itemPlace);
+                    addingFinished = true;
+                    break;
+                    // dokoncil som pridavanie masa
+                }else{
+                    Meat divideMeat = SerializationUtils.clone(addingMeat);
+                    addingMeat.setCount(addingMeat.getCount() - shelf.getFreeCapacity());
+                    divideMeat.setCount(shelf.getFreeCapacity());
+                    shelf.getMeat().add(divideMeat);
+                    ItemPlace itemPlace = new ItemPlace();
+                    itemPlace.setBoxNumber(cb.getNumber());
+                    itemPlace.setShelfNumber(shelf.getNumber());
+                    itemPlace.setCount(divideMeat.getCount());
+                    itemPlaces.add(itemPlace);
+                }
+
+            }
+            if (addingFinished) break;
+        }
+
+        ItemPlace.ItemPlaceList itemPlaceList = new ItemPlace.ItemPlaceList();
+        itemPlaceList.setItemPlaceList(itemPlaces);
+        return GSON.toJson(itemPlaceList);
+
     }
 
     @Override
