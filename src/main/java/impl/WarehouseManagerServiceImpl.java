@@ -6,6 +6,7 @@ import com.sun.org.apache.xml.internal.dtm.ref.DTMDefaultBaseIterators;
 import com.sun.org.apache.xpath.internal.axes.IteratorPool;
 import dto.MeatGroup;
 import dto.input.ItemPlaceInput;
+import dto.input.MeatList;
 import dto.output.ItemPlace;
 import model.*;
 import org.joda.time.DateTime;
@@ -127,7 +128,10 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
     @Override
     public String putItemInStock(String inputJson) {
         Meat addingMeat = (new Gson()).fromJson(inputJson, Meat.class);
+        return GSON.toJson(putItemInStock(addingMeat));
+    }
 
+    private ItemPlace.ItemPlaceList putItemInStock(Meat addingMeat) {
         Warehouse warehouse = CompanyProvider.getInstance().getAppData().getWarehouse();
         List<ItemPlace> itemPlaces = new ArrayList<>();
         boolean addingFinished = false;
@@ -172,13 +176,18 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
 
         ItemPlace.ItemPlaceList itemPlaceList = new ItemPlace.ItemPlaceList();
         itemPlaceList.setItemPlaceList(itemPlaces);
-        return GSON.toJson(itemPlaceList);
-
+        return itemPlaceList;
     }
+
 
     @Override
     public String receivingShipments(String inputJson) {
-        return null;
+        ItemPlace.ItemPlaceList itemPlaceList = new ItemPlace.ItemPlaceList();
+        MeatList meatList = (new Gson()).fromJson(inputJson, MeatList.class);
+        for (Meat meat : meatList.getMeatList()) {
+            itemPlaceList.getItemPlaceList().addAll(putItemInStock(meat).getItemPlaceList());
+        }
+        return GSON.toJson(itemPlaceList);
     }
 
     @Override
