@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+
 /**
  * Created by Rex on 19.4.2016.
  */
@@ -61,8 +62,7 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
 
     @Override
     public String getPickingItemFromWarehouseByMeatType(String inputJson) {
-        Gson gson = new Gson();
-        ItemPlaceInput input = gson.fromJson(inputJson, ItemPlaceInput.class);
+        ItemPlaceInput input = GSON.fromJson(inputJson, ItemPlaceInput.class);
         Warehouse warehouse = CompanyProvider.getInstance().getAppData().getWarehouse();
         ItemPlace output = new ItemPlace();
         List<Meat> meats = new ArrayList<>();
@@ -80,8 +80,6 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
         }
 
         Collections.sort(meats, new MeatDateComparator());
-
-
 
         return null;
     }
@@ -146,11 +144,7 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
 
     @Override
     public byte[] generateReportOnCurrentState() {
-        StringBuilder csv = new StringBuilder();
-
-        csv.append("meat-type,count,expiry-date,freezed" + System.lineSeparator());
-
-        return csv.toString().getBytes();
+        return Reports.generateCsvReport(CompanyProvider.getInstance().getAppData().getWarehouse()).getBytes();
     }
 
     @Override
@@ -166,30 +160,5 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
     @Override
     public void emptyCoolingBoxForCleaning(String inputJson) {
 
-    }
-
-    private HashMap<MeatGroup, Integer> getMeatCountByType() {
-        HashMap<MeatGroup, Integer> meatCounts = new HashMap<>();
-
-        for (CoolingBox coolingBox : CompanyProvider.getInstance().getAppData().getWarehouse().getCoolingBoxes()) {
-            for (Shelf shelf : coolingBox.getShelves()) {
-                for (Meat meat : shelf.getMeat()) {
-                    MeatGroup meatGroup = new MeatGroup();
-                    meatGroup.setBoxType(coolingBox.getType());
-                    meatGroup.setExpiryDate(meat.getExpiryDate());
-                    meatGroup.setMeatType(meat.getMeatType());
-
-                    int totalCount = 0;
-                    if(meatCounts.containsKey(meatGroup)) {
-                        totalCount = meatCounts.get(meatGroup);
-                    }
-
-                    totalCount += meat.getCount();
-                    meatCounts.put(meatGroup, totalCount);
-                }
-            }
-        }
-
-        return meatCounts;
     }
 }
