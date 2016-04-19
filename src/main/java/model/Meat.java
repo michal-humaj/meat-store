@@ -2,6 +2,8 @@ package model;
 
 import com.google.gson.annotations.SerializedName;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import util.DateConverter;
 
 /**
@@ -44,6 +46,18 @@ public class Meat {
     public String getExpiryDate() {
         DateTime slaughterDate = DateConverter.toDateTimeDots(getDate());
         return DateConverter.toStringDots(slaughterDate.plusDays(getMeatType().getFreshDays()));
+    }
+
+    public int getDurabilitDate(){
+        DateTimeFormatter dtfOut = DateTimeFormat.forPattern("MMddyyyy");
+        int now = Integer.valueOf(dtfOut.print(DateTime.now()));
+        int expiry = Integer.valueOf(dtfOut.print(DateConverter.toDateTimeDots(getDate())));
+
+        if (expiry > now){
+            return now-expiry;
+        }
+
+        return -1;
     }
 
     public void setDate(String date) {

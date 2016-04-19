@@ -30,7 +30,7 @@ public class Main {
             String jsonPickItem = new String(Files.readAllBytes(Paths.get("pickItemFromWarehouse.json")));
             String out = warehouseManageService.getPickingItemFromWarehouseByMeatType(jsonPickItem);
 
-
+            warehouseManageService.preparationShipmentOfMeat("meatOrderPlace.json");
 
         } catch (IOException e) {
             e.printStackTrace();
