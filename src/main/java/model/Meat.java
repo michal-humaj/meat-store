@@ -68,4 +68,8 @@ public class Meat implements Serializable {
     public void setShelf(Shelf shelf) {
         this.shelf = shelf;
     }
+
+    public boolean isExpired() {
+        return DateConverter.toDateTimeDots(getExpiryDate()).isBeforeNow();
+    }
 }

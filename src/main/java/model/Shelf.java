@@ -10,6 +10,7 @@ public class Shelf {
 
     private String number;
     private int capacity;
+    private CoolingBox coolingBox;
     private List<Meat> meat = new ArrayList<Meat>();
 
     public int getFreeCapacity(){
@@ -42,5 +43,13 @@ public class Shelf {
 
     public void setMeat(List<Meat> meat) {
         this.meat = meat;
+    }
+
+    public CoolingBox getCoolingBox() {
+        return coolingBox;
+    }
+
+    public void setCoolingBox(CoolingBox coolingBox) {
+        this.coolingBox = coolingBox;
     }
 }

@@ -20,6 +20,7 @@ public class WarehouseConfigurationServiceImpl implements WarehouseConfiguration
 
         for (CoolingBox coolingBox : appData.getWarehouse().getCoolingBoxes()) {
             for (Shelf shelf : coolingBox.getShelves()) {
+                shelf.setCoolingBox(coolingBox);
                 for (Meat meat : shelf.getMeat()) {
                     meat.setShelf(shelf);
                 }

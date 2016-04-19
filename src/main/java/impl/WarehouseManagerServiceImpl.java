@@ -2,6 +2,7 @@ package impl;
 
 import api.WarehouseManageService;
 import com.google.gson.Gson;
+import com.sun.org.apache.xml.internal.dtm.ref.DTMDefaultBaseIterators;
 import com.sun.org.apache.xpath.internal.axes.IteratorPool;
 import dto.MeatGroup;
 import dto.input.ItemPlaceInput;
@@ -64,7 +65,7 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
     public String getPickingItemFromWarehouseByMeatType(String inputJson) {
         ItemPlaceInput input = GSON.fromJson(inputJson, ItemPlaceInput.class);
         Warehouse warehouse = CompanyProvider.getInstance().getAppData().getWarehouse();
-        ItemPlace output = new ItemPlace();
+        ItemPlace.ItemPlaceList output = new ItemPlace.ItemPlaceList();
         List<Meat> meats = new ArrayList<>();
 
         for (CoolingBox coolingBox : warehouse.getCoolingBoxes()) {
@@ -81,7 +82,41 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
 
         Collections.sort(meats, new MeatDateComparator());
 
-        return null;
+        int meatMissing = input.getCount();
+        Shelf meatShelf;
+        int meatTaken;
+        for(Meat meat : meats) {
+            meatShelf = meat.getShelf();
+            meatTaken = meatMissing;
+
+            if((meatMissing - meat.getCount()) == 0) {
+                meatShelf.getMeat().remove(meat);
+                meatTaken = meat.getCount();
+                meatMissing = 0;
+            }
+            else if((meatMissing - meat.getCount()) > 0) {
+                meatShelf.getMeat().remove(meat);
+                meatTaken = meat.getCount();
+                meatMissing -= meat.getCount();
+            }
+            else {
+                meat.setCount(meat.getCount() - meatTaken);
+                meatMissing = 0;
+            }
+
+            meatShelf.setCapacity(meatShelf.getCapacity() + meatTaken);
+
+            ItemPlace itemPlace = new ItemPlace();
+            itemPlace.setBoxNumber(meatShelf.getCoolingBox().getNumber());
+            itemPlace.setCount(meatTaken);
+            itemPlace.setDateOfExpiration(meat.getExpiryDate());
+            itemPlace.setShelfNumber(meatShelf.getNumber());
+            output.getItemPlaceList().add(itemPlace);
+
+            if(meatMissing == 0) break;
+        }
+
+        return GSON.toJson(output);
     }
 
     @Override

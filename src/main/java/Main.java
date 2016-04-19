@@ -51,7 +51,7 @@ public class Main {
         Meat meat2 = new Meat();
         Meat meat3 = new Meat();
 
-        meat1.setCount(10);
+        meat1.setCount(2);
         meat1.setDate("08.08.2016");
         meat1.setFrozen(false);
         meat1.setMeatType(MeatType.CHICKEN);
@@ -61,7 +61,7 @@ public class Main {
         meat2.setFrozen(false);
         meat2.setMeatType(MeatType.SALMON);
 
-        meat3.setCount(10);
+        meat3.setCount(2);
         meat3.setDate("08.06.2016");
         meat3.setFrozen(false);
         meat3.setMeatType(MeatType.CHICKEN);
