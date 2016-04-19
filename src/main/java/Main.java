@@ -4,7 +4,6 @@ import impl.CompanyProvider;
 import impl.WarehouseConfigurationServiceImpl;
 import impl.WarehouseManagerServiceImpl;
 import model.*;
-import model.Warehouse;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -100,4 +99,13 @@ public class Main {
             }
         }
     }
+
+    public static void receiveShipments() throws IOException {
+        WarehouseManageService warehouseManageService = new WarehouseManagerServiceImpl();
+
+        String receivingShipments = new String(Files.readAllBytes(Paths.get("receivingShipments.json")));
+        String out = warehouseManageService.receivingShipments(receivingShipments);
+        System.out.println("receiving shipments" + out);
+    }
+
 }
