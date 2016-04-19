@@ -19,6 +19,8 @@ public class Meat {
     @SerializedName("is-frozen")
     private boolean frozen;
 
+    private Shelf shelf;
+
     public MeatType getMeatType() {
         return meatType;
     }
@@ -54,5 +56,13 @@ public class Meat {
 
     public void setFrozen(boolean frozen) {
         this.frozen = frozen;
+    }
+
+    public Shelf getShelf() {
+        return shelf;
+    }
+
+    public void setShelf(Shelf shelf) {
+        this.shelf = shelf;
     }
 }
