@@ -6,11 +6,14 @@ import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import util.DateConverter;
 
+import java.io.Serializable;
+
 /**
  * Created by Rex on 19.4.2016.
  */
-public class Meat {
+public class Meat implements Serializable {
 
+    @SerializedName("type")
     private MeatType meatType;
 
     private int count;
@@ -78,5 +81,13 @@ public class Meat {
 
     public void setShelf(Shelf shelf) {
         this.shelf = shelf;
+    }
+
+    public boolean isExpired() {
+        return DateConverter.toDateTimeDots(getExpiryDate()).isBeforeNow();
+    }
+
+    public boolean isInDurability(int days) {
+        return false;
     }
 }
