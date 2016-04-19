@@ -2,14 +2,11 @@ package impl;
 
 import api.WarehouseConfigurationService;
 import com.google.gson.Gson;
-import dto.output.ItemPlace;
 import model.AppData;
 import model.CoolingBox;
 import model.Meat;
 import model.Shelf;
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import util.DateConverter;
 
 /**
  * Created by Rex on 19.4.2016.
@@ -38,7 +35,7 @@ public class WarehouseConfigurationServiceImpl implements WarehouseConfiguration
         LocalDate date = CompanyProvider.getInstance().getCurrentDate();
         CompanyProvider.getInstance().setCurrentDate(date.plusDays(1));
 
-        String report = Reports.generateCsvReport(CompanyProvider.getInstance().getAppData().getWarehouse());
+        String report = Reports.generateCsvReportForMeatWithIncomingExpiryDate(CompanyProvider.getInstance().getAppData().getWarehouse());
         //send report to the manager
     }
 }
