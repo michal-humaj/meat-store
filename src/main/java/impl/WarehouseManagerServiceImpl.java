@@ -6,8 +6,10 @@ import dto.input.*;
 import dto.output.ItemPlace;
 import dto.output.MeatOrderPlace;
 import dto.output.MoveItem;
-import model.*;
-import org.apache.commons.lang3.SerializationUtils;
+import model.CoolingBox;
+import model.Meat;
+import model.Shelf;
+import model.Warehouse;
 import util.DateConverter;
 import util.MeatDateComparator;
 
@@ -59,10 +61,7 @@ public class WarehouseManagerServiceImpl implements WarehouseManageService {
     public String preparationShipmentOfMeat(String inputJson) {
         MeatOrder.MeatOrderList meatOrderList = GSON.fromJson(inputJson, MeatOrder.MeatOrderList.class);
 
-        Warehouse warehouse = CompanyProvider.getInstance().getAppData().getWarehouse();
-
         MeatOrderPlace.MeatOrderPlaceList result = new MeatOrderPlace.MeatOrderPlaceList();
-        //List<ItemPlace> itemPlaceList = new ArrayList<>();
         ItemPlace.ItemPlaceList itemPlaceList;
 
         for (MeatOrder meatOrder : meatOrderList.getMeatOrderList()){
